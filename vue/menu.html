@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <style>
+        ul,li{
+            list-style: none;
+        }
+        .one{
+            width:400px;
+            height:auto;
+            line-height: 24px;
+            margin-bottom:40px;
+        }
+        .one>li{
+            margin-bottom:10px;
+        }
+        .one>li{
+            font-size:20px;
+            font-weight: 600;
+            color:#2c3e50;
+            text-decoration: none;
+        }
+        a{
+            text-decoration: none;
+            color:#666;
+        }
+        .two{
+            height:auto;
+
+            margin-left:-40px;
+        }
+        .two>li{
+            font-size:16px;
+        }
+    </style>
+</head>
+<body>
+   <div id="vue">
+       <conmenu></conmenu>
+   </div>
+</body>
+<script>
+    Vue.component('conmenu',{
+        template:`<div class="menu">
+           <ul class="one" v-for="item in conmenu">
+              <li @click="change(item)">{{item['title']}}</li>
+               <ul class="two" v-for="son in item['children']" v-show="item.flag">
+                   <li><a href="">{{son['title']}}</a></li>
+                   </ul>
+           </ul></div>`,
+        //数据
+        data:function () {
+            return {
+                conmenu:[
+                   {title:'安装',flag:'true',children:[{title:'Vue 实例'},{title:'模板语法'},{title:'计算属性和观察者'},{title:'事件处理'}]},
+                   {title:'Vue',flag:'true',children:[{title:'可复用性 & 组合'},{title:'自定义指令'},{title:'渲染函数 & JSX'},{title:'过滤器'}]},
+                   {title:'规模化',flag:'true',children:[{title:'生产环境部署'},{title:'单文件组件'},{title:'单元测试'},{title:'TypeScript 支持'}]},
+               ],
+            }
+        },
+        methods:{
+            change:function(obj){
+                obj.flag=!obj.flag;
+            }
+        }
+    })
+    var vm=new Vue({
+        el:'#vue',
+    })
+</script>
+</html>

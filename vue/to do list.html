@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="node_modules/vue/dist/vue.js"></script>
+    <style>
+        #vue{
+            width:80%;
+            height: 500px;
+            margin:0 auto;
+            margin-top:30px;
+        }
+        .title{
+            width:100%;
+            height:40px;
+            margin-bottom:20px;
+        }
+        .title>input{
+            width:100%;
+            height:100%;
+            border-radius:6px;
+            border:1px solid rgba(0,0,0,0.5);
+            font-size:18px;
+            padding:8px;
+            box-sizing: border-box;
+            outline: none;
+            font-family: 微软雅黑;
+        }
+        .btns{
+            width:100%;
+            height:30px;
+            margin-bottom:30px;
+        }
+        .btns button{
+            border-radius: 6px;
+            float: right;
+            margin-left:20px;
+            border:none;
+            padding:6px 12px;
+            color:rgba(0,0,0,0.7);
+        }
+        .list{
+            width:100%;
+            height:30px;
+            position: relative;
+            line-height: 30px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .list .circle{
+            display: inline-block;
+            width:10px;
+            height:10px;
+            border-radius: 50%;
+            border:1px solid rgba(0,0,0,0.6);
+            position:absolute;
+            top:30%;
+            left:20px;
+        }
+        .list .content{
+            display: inline-block;
+            width:80%;
+            height:100%;
+            margin-left:40px;
+        }
+        .list .del{
+            float:right;
+            height:100%;
+        }
+        .red{
+            background: mediumvioletred;
+        }
+    </style>
+</head>
+<body>
+    <div id="vue">
+        <div class="title">
+            <input type="text" placeholder="请输入事项" v-on:keydown.13="add()" v-model="text">
+        </div>
+        <div class="btns">
+            <button @click="change(0)">未完成</button>
+            <button @click="change(1)">已完成</button>
+            <button @click="change('all')">全部显示</button>
+        </div>
+        <div class="con">
+                <div class="list" v-show="all.length>0" v-for="item in datas">
+                   <div class="editBox" v-if="item.edit"  @dblclick="edit(item)">
+                    <span class="circle" @click="changestate(item,item.state)" :class={red:item.state==1}></span>
+                    <span class="del" @click="del(item)">删除</span>
+                    <span class="content">{{item.con}}</span>
+                  </div>
+                    <div class="edit" v-else>
+                        <input type="text" v-model="item.con" @blur="edit(item)">
+                    </div>
+                </div>
+            <div class="list" v-show="all.length==0" style="margin-left:20px;">没有内容</div>
+        </div>
+    </div>
+    <script>
+        var  vm=new Vue({
+            el:'#vue',
+            data:{
+//                将数据存储在localStorage中
+//                all:[],
+                all:localStorage.todo?JSON.parse(localStorage.todo):[],
+                text:"",
+                status:'all',
+            },
+            methods:{
+                add:function () {
+                   var obj={};
+                   obj.id=Math.random()*1000+new Date().getTime();
+                   obj.con=this.text;
+                   obj.state=0;
+                   obj.edit=true;
+                   this.text='';
+                   this.all.push(obj);
+                   localStorage.todo=JSON.stringify(this.all);
+
+                },
+                changestate:function(item,state){
+                    if(state==1){
+                        item.state=0;
+                    }else{
+                        item.state=1;
+                    }
+                    localStorage.todo=JSON.stringify(this.all);
+                },
+                del:function (item) {
+                   this.all=this.all.filter(function(Obj) {
+                         return Obj.id!=item.id;
+                     })
+                    localStorage.todo=JSON.stringify(this.all);
+                },
+                change:function (str) {
+                    this.status=str;
+                    localStorage.todo=JSON.stringify(this.all);
+                },
+                edit:function (item) {
+                   item.edit=!item.edit;
+                    localStorage.todo=JSON.stringify(this.all);
+                }
+            },
+            computed:{
+                datas:function (str) {
+                    var that=this;
+                   return  that.all.filter(function(obj) {
+                        if(that.status=='all'){
+                            return obj;
+                        }else{
+                            if(obj.state==that.status){
+                                return obj;
+                            }
+                        }
+                    })
+
+
+                }
+            }
+
+        })
+    </script>
+</body>
+</html>

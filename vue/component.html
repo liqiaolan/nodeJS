@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="node_modules/vue/dist/vue.js"></script>
+</head>
+<style>
+    .button {
+       padding:6px 12px;
+        border-radius: 4px;
+        border:1px solid rgba(0,0,0,0.5);
+        background:#f0f0f0;
+        display: inline-block;
+        box-shadow: 0 0 4px 1px rgba(0,0,0,0.2);
+     }
+    .red{
+        background: red;
+    }
+</style>
+<body>
+   <div class="root">
+
+   <!--组件就是用来定义所需要模块的样式，逻辑，数据-->
+   <component-button name="上传"></component-button>
+   <component-button name="更新"></component-button>
+   <component-button name="删除"></component-button>
+   <component-button name="按钮1"></component-button>
+
+   </div>
+</body>
+<script>
+    Vue.component('componentButton',{
+        props:["name"],
+        //模板
+        template:" <div class='button' @click='change(red)' :class='{red:red}'>{{name}}</div>",
+        data:function () {
+          return{
+              red:false,
+          }
+        },
+        methods:{
+            change:function (red) {
+               this.red=!red;
+            }
+        }
+    })
+    new Vue({
+        el:'.root',
+    })
+</script>
+</html>
