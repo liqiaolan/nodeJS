@@ -12,7 +12,7 @@ var index=Vue.component('index',{
 var navM=Vue.component('navM',{
     template:`
       <nav>
-     <router-link :to="item.url" v-for="(item,key) in navData" :key="key" exactd>{{item.title}}</router-link>
+     <router-link :to="item.url" v-for="(item,key) in navData" :key="key" exact>{{item.title}}</router-link>
      <router-link v-if="!islogin" to="/login">login</router-link>
      <span v-if="islogin" @click="show" style="cursor: pointer">{{name}}
           <span  @click="logout" v-show="isshow">退出</span>
