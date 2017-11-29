@@ -19,6 +19,14 @@ var router=new VueRouter({
                        left: left,
                        right: right,
                    },
+                   beforeEnter:(to,from,next)=>{
+                       if(sessionStorage[login]&&JSON.parse(sessionStorage.login.name)){
+                           next();
+                       }else{
+                           router.push('/login');
+                       }
+
+                   },
                }
            ]
        },
